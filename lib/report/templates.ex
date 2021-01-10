@@ -97,9 +97,15 @@ defmodule GatherSubmissions.Report.Templates do
   \definecolor{Reject}{rgb}{0.55, 0.0, 0.0}
   \definecolor{Selected}{rgb}{0.97, 0.91, 0.81}
 
+  \newcounter{startsubmission}
+  \newwrite\myoutput
+  \immediate\openout\myoutput=pages_per_group.output
+
   \begin{document}
   <%= for report <- reports do %>
+  \setcounter{startsubmission}{\thepage}
   <%= submission_report(report) %>
+  \write\myoutput{<%= report.group_id %>,\thestartsubmission,\thepage}
   \newpage
   <% end %>
   \end{document}
