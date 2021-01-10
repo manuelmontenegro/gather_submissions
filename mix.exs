@@ -9,7 +9,6 @@ defmodule GatherSubmissions.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       escript: [main_module: GatherSubmissions.CLI],
-
       name: "GatherSubmissions",
       source_url: "https://github.com/manuelmontenegro/gather_submissions",
       docs: [main: "readme", extras: ["README.md"]]
