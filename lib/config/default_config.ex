@@ -152,8 +152,8 @@ defmodule GatherSubmissions.Config.DefaultConfig do
 
   #output_dir: "result"
 
-  # strip_outside (Boolean, optional, default: false)
-  # -------------
+  # strip_outside_tags (Boolean, optional, default: false)
+  # ------------------
   #
   # If set to true, the PDF file will only display the lines of the source
   # code contained within the delimiters "@ <answer>" and "@ </answer>", respectively
