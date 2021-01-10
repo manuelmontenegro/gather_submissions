@@ -49,7 +49,7 @@ defmodule GatherSubmissions.DOMjudge do
     logger.("Problem ID: #{problem_id}")
 
     logger.("Fetching users...")
-    teams = API.get_public_teams(conn, contest_id)
+    teams = API.get_teams(conn, contest_id)
 
     logger.("Fetching judgements...")
     judgements = API.get_judgements(conn, contest_id)

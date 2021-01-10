@@ -64,14 +64,14 @@ defmodule GatherSubmissions.DOMjudge.API do
   end
 
   @doc """
-  Returns a list of public DOMjudge users (teams) participating in a contest.
+  Returns a list of DOMjudge users (teams) participating in a contest.
 
   The `contest_id` contains the identifier of a contest; not its name. Use
   `get_contest_id_by_name/2` to obtain the identifier if needed.
   """
-  @spec get_public_teams(Connection.t(), String.t()) :: [map()]
-  def get_public_teams(conn, contest_id) do
-    Connection.get(conn, teams_url(contest_id), public: true)
+  @spec get_teams(Connection.t(), String.t()) :: [map()]
+  def get_teams(conn, contest_id) do
+    Connection.get(conn, teams_url(contest_id))
   end
 
   @doc """
