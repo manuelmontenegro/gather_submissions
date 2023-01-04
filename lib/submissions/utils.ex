@@ -96,7 +96,9 @@ defmodule GatherSubmissions.Submission.Utils do
           {:error, _, _} -> content
           bin -> bin
         end
-      _ -> content
+
+      _ ->
+        content
     end
   end
 

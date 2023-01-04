@@ -46,15 +46,20 @@ defmodule GatherSubmissions.CLI do
       IO.puts("Edit #{@config_file} and then run again")
     end
   end
+
   def main(["--gen-template"]) do
-    if File.exists?(@template_file) do      
+    if File.exists?(@template_file) do
       IO.puts(in_red("Error:") <> " #{@template_file} already exists")
-      IO.puts("If you want the default template, delete #{@template_file} from the current directory.")
+
+      IO.puts(
+        "If you want the default template, delete #{@template_file} from the current directory."
+      )
     else
       File.write!(@template_file, GatherSubmissions.Report.Templates.default_template())
       log("Template created in #{@template_file}.")
     end
   end
+
   def main(_) do
     IO.puts(in_red("Error:") <> " invalid arguments")
     IO.puts(@usage)
