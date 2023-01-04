@@ -7,7 +7,6 @@ defmodule GatherSubmissions.Report.Templates do
 
   @file_include_template ~S"""
   Fichero \verb|<%= Path.basename(file) %>|
-  \lstset{inputencoding=utf8/latin1}
   \lstinputlisting[language=C++]{<%= file %>}
   """
 
@@ -52,13 +51,10 @@ defmodule GatherSubmissions.Report.Templates do
   \documentclass{article}
 
   \usepackage[spanish]{babel}
-  \usepackage[utf8]{inputenc}
   \usepackage[T1]{fontenc}
   \usepackage[default]{raleway}
   \usepackage{fullpage}
   \usepackage{listings}
-  \usepackage{listingsutf8}
-  \usepackage{inconsolata}
   \usepackage{amsmath}
   \usepackage{amsfonts}
   \usepackage{tabularx}
@@ -67,7 +63,7 @@ defmodule GatherSubmissions.Report.Templates do
   \usepackage[listings]{tcolorbox}
   \usepackage{comment}
 
-
+  \setmonofont{Inconsolata}
 
   \definecolor{mygreen}{rgb}{0,0.6,0}
   \definecolor{mygray}{rgb}{0.5,0.5,0.5}
