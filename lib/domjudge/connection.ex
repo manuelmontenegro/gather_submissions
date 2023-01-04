@@ -57,7 +57,7 @@ defmodule GatherSubmissions.DOMjudge.Connection do
     query_string = if query_params == [], do: "", else: "?" <> URI.encode_query(query_params)
     headers = [accept: "application/json"] |> with_auth_header(conn)
     full_url = conn.endpoint <> url <> query_string
-    response = HTTPoison.get!(full_url, headers)
+    response = HTTPoison.get!(full_url, headers, timeout: 20000)
 
     case response.status_code do
       200 ->
