@@ -5,51 +5,8 @@ defmodule GatherSubmissions.Report.Templates do
 
   require EEx
 
-  @file_include_template ~S"""
-  Fichero \verb|<%= Path.basename(file) %>|
-  \lstinputlisting[language=C++]{<%= file %>}
-  """
-
-  @attempt_row_template ~S"""
-  <%= if attempt.selected do %>\rowcolor{Selected}<% end %>
-  <%= attempt.submission_id %> & <%= attempt.user_id %> & <%= attempt.time %> & <%= color_verdict(attempt.verdict) %>
-  """
-
-  @attempt_table_template ~S"""
-  \begin{center}\begin{tabular}{|c|c|l|c|}\hline
-  \textbf{ID envio} & \textbf{Usuario/a} & \textbf{Hora envío} & \textbf{Veredicto} \\\hline
-  <%= for attempt <- attempts do %>
-    <%= attempt_row(attempt) %>\\\hline
-  <% end %>
-  \end{tabular}\end{center}
-  """
-
-  @submission_template ~S"""
-  \begin{tcolorbox}[colback=Claro!70,colframe=Oscuro]
-    \begin{center}
-      {\Large\textbf{Grupo <%= report.group_id %>}}\end{center}
-    \tcblower
-    \textbf{Estudiantes:}
-
-    \begin{itemize}<%= for st <- report.students do %>
-      \item <%= st.surname %>, <%= st.name %> (<%= st.user %>)<% end %>
-    \end{itemize}
-  \end{tcolorbox}
-
-  <%= if report.attempts != [], do: attempt_table(report.attempts) %>
-
-  <%= if report.local_files do %>
-  <%= for file <- report.local_files do %>
-  <%= file_include(file) %>
-  <% end %>
-  <% else %>
-  No hay ninguna entrega ACCEPT antes de la fecha límite.
-  <% end %>
-  """
-
-  @whole_template ~S"""
+  @report_template ~S"""
   \documentclass{article}
-
   \usepackage[spanish]{babel}
   \usepackage[T1]{fontenc}
   \usepackage[default]{raleway}
@@ -99,28 +56,63 @@ defmodule GatherSubmissions.Report.Templates do
 
   \begin{document}
   <%= for report <- reports do %>
-  \setcounter{startsubmission}{\thepage}
-  <%= submission_report(report) %>
-  \write\myoutput{<%= report.group_id %>,\thestartsubmission,\thepage}
-  \newpage
+  <%#--------------------------------------- REPORT --------------------------------------- %>
+    \setcounter{startsubmission}{\thepage}
+
+    <%#--------------------------------------- STUDENTS ----------------------------------- %>
+    \begin{tcolorbox}[colback=Claro!70,colframe=Oscuro]
+      \begin{center}
+        {\Large\textbf{Grupo <%= report.group_id %>}}\end{center}
+      \tcblower
+      \textbf{Estudiantes:}
+
+      \begin{itemize}
+        <%= for st <- report.students do %>
+          \item <%= st.surname %>, <%= st.name %> (<%= st.user %>)
+        <% end %>
+      \end{itemize}
+    \end{tcolorbox}
+    <%#------------------------------------ END STUDENTS ---------------------------------- %>
+
+    <%#------------------------------------- ATTEMPTS ------------------------------------- %>
+    <%= if report.attempts != [] do %>
+      \begin{center}\begin{tabular}{|c|c|l|c|}\hline
+      \textbf{ID envio} & \textbf{Usuario/a} & \textbf{Hora envío} & \textbf{Veredicto} \\\hline
+      <%= for attempt <- report.attempts do %>
+        <%= if attempt.selected do %>\rowcolor{Selected}<% end %>
+        <%= attempt.submission_id %> & <%= attempt.user_id %> & <%= attempt.time %> & 
+          <%= if attempt.verdict == "AC" do %>
+            \textcolor{Accept}{\textbf{AC}}
+          <% else %>
+            \textcolor{Reject}{\textbf{<%= attempt.verdict %>}}
+          <% end %>
+        \\\hline
+      <% end %>
+      \end{tabular}\end{center}
+    <% end %>
+    <%#------------------------------------ END ATTEMPTS ---------------------------------- %>
+
+    <%#--------------------------------- FILE CONTENTS ------------------------------------ %>
+    <%= if report.local_files do %>
+      <%= for file <- report.local_files do %>
+        Fichero \verb|<%= Path.basename(file) %>|
+        \lstinputlisting[language=C++]{<%= file %>}
+      <% end %>
+    <% else %>
+      No hay ninguna entrega ACCEPT antes de la fecha límite.
+    <% end %>
+    \write\myoutput{<%= report.group_id %>,\thestartsubmission,\thepage}
+    <%#-------------------------------- END FILE CONTENTS --------------------------------- %>
+
+    \newpage
+  <%#------------------------------------- END REPORT ------------------------------------- %>
   <% end %>
   \end{document}
   """
-
-  defp color_verdict("AC"), do: "\\textcolor{Accept}{\\textbf{AC}}"
-  defp color_verdict(other), do: "\\textcolor{Reject}{\\textbf{#{other}}}"
-
-  EEx.function_from_string(:defp, :file_include, @file_include_template, [:file])
-
-  EEx.function_from_string(:defp, :submission_report, @submission_template, [:report])
 
   @doc """
   Genrates the LaTeX code corresponding to a list of reports.
   """
   @spec submission_reports([GatherSubmissions.Report.t()]) :: String.t()
-  EEx.function_from_string(:def, :submission_reports, @whole_template, [:reports])
-
-  EEx.function_from_string(:defp, :attempt_row, @attempt_row_template, [:attempt])
-
-  EEx.function_from_string(:defp, :attempt_table, @attempt_table_template, [:attempts])
+  EEx.function_from_string(:def, :submission_reports, @report_template, [:reports])
 end
