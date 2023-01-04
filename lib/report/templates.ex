@@ -6,6 +6,33 @@ defmodule GatherSubmissions.Report.Templates do
   require EEx
 
   @report_template ~S"""
+  <%#
+    Default template file for gather_submissions.
+
+    The template receives a variable `reports`, which is a list of reports, one for each group.
+    Each report contains four fields:
+
+      * group_id: The group identifier corresponding to the author(s) of each submission. If there are
+        no groups, a fresh identifier is generated from the user's id.
+
+      * students: A list of the students in the group, each of one consisting of four fields: 
+          - name: student's first name
+          - surname: student's last name
+          - user: user's id in DOMjudge
+          - group: group's id to which the student belongs
+
+      * attempts: A list of the submissions sent by any of group members. Each attempt contains five fields:
+          - submission_id: submission's id, as given by DOMjudge
+          - user_id: id of the group member that did the submission
+          - time: submission timestamp (date/time)
+          - verdict: submission result ("AC", "WA", "RTE", etc.)
+          - selected: a boolean indicating whether this is attempt that will be shown in the PDF file
+
+      * local_files: A list of the filenames (relative to the `main.tex` directory) corresponding to each
+        group
+
+
+  #%>
   \documentclass{article}
   \usepackage[spanish]{babel}
   \usepackage[T1]{fontenc}
