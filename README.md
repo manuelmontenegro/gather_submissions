@@ -12,7 +12,7 @@ in order to grade them offline.
 
 * Erlang/OTP 21 or later.
 
-  Most GNU/Linux distributions provide packages for this. For example, in Fedora 33:
+  Most GNU/Linux distributions provide packages for this. For example, in Fedora:
 
   ```
   # sudo dnf install erlang
@@ -52,7 +52,18 @@ Just run `gather_submissions` in the command line:
 
 If will create a `gather_submissions.yaml` file in the current directory. Read this file carefully and modify it by setting the corresponding options. Then, run `gather_submissions` again in the same directory as the configuration file.
 
+The generated LaTeX file is meant to be run with `xelatex`. If you want to use another system (e.g. `pdflatex`) or you want to
+customize the appearance of the PDF file, you have to modify the LaTeX template. In order to do this, pass the `--gen-template`
+option:
 
+```
+# ./gather_submissions --gen-template
+```
+
+This generates a `gather_submissions_template.eex` file with the default template, which you can adjust to your needs.
+
+When `gather_submissions` is run, it looks for a `gather_submissions_template.eex` file in the current directory, and uses it
+as a template. If such a file does not exist, the default template will be used.
 
 ## How to build from source
 
@@ -80,6 +91,6 @@ Compiling from source code requires [Elixir](https://elixir-lang.org/) version 1
 
 ## License
 
-Copyright (C) 2021 by Manuel Montenegro (<montenegro@fdi.ucm.es>)
+Copyright (C) 2023 by Manuel Montenegro (<montenegro@fdi.ucm.es>)
 
 This code is released under Apache License 2.0
