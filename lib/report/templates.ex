@@ -110,9 +110,30 @@ defmodule GatherSubmissions.Report.Templates do
   \end{document}
   """
 
+  EEx.function_from_string(:defp, :submission_reports_default, @report_template, [:reports])
+
+
   @doc """
-  Genrates the LaTeX code corresponding to a list of reports.
+  Generates the LaTeX code corresponding to a list of reports.
+
+  It may receive the name of an EEX file as second parameter. If this parameter is `nil`,
+  it uses a default template.
   """
-  @spec submission_reports([GatherSubmissions.Report.t()]) :: String.t()
-  EEx.function_from_string(:def, :submission_reports, @report_template, [:reports])
+  @spec submission_reports([GatherSubmissions.Report.t()], String.t() | nil) :: String.t()
+  def submission_reports(reports, template \\ nil, logger \\ fn _ -> :ok end)
+
+  def submission_reports(reports, nil, _), do: submission_reports_default(reports)
+  def submission_reports(reports, template, logger) do
+    logger.("Using custom template at #{template}")
+    EEx.eval_string(File.read!(template), reports: reports)
+  end
+
+
+  @doc """
+  It returns the default template in EEx format.
+  """
+  @spec default_template() :: String.t()
+  def default_template() do
+    @report_template
+  end
 end

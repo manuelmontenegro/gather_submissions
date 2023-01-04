@@ -23,12 +23,16 @@ defmodule GatherSubmissions do
   include the name of the CSV file containing the information of students, DOMjudge
   access data, etc. See `GatherSubmissions.Config` for more details.
 
+  The `template_file` parameter contains the name of a EEx file that will be used
+  as a template for generating the LaTeX reports. If this parameter is `nil`, the default
+  template is used.
+
   This function reports the progress of the retrieval process by calling the
   `logger` function with a message string in each phase.
   """
 
-  @spec gather_submissions(GatherSubmissions.Config.t()) :: :ok
-  def gather_submissions(%GConfig{} = config, logger \\ fn _ -> :ok end) do
+  @spec gather_submissions(GatherSubmissions.Config.t(), String.t() | nil) :: :ok
+  def gather_submissions(%GConfig{} = config, template_file \\ nil, logger \\ fn _ -> :ok end) do
     students = fetch_students(config)
     grouped_subs = fetch_submissions_by_group(config, students, logger)
     selected_subs = select_sub_for_each_group(config, grouped_subs)
@@ -36,7 +40,7 @@ defmodule GatherSubmissions do
     text =
       build_reports(config, grouped_subs, selected_subs, students, logger)
       |> sort_reports()
-      |> Report.Templates.submission_reports()
+      |> Report.Templates.submission_reports(template_file, logger)
 
     output_file = Path.join(config.output_dir, "main.tex")
     File.mkdir_p!(config.output_dir)
