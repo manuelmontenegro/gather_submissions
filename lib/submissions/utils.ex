@@ -84,9 +84,20 @@ defmodule GatherSubmissions.Submission.Utils do
     submission.files.()
     |> Enum.map(fn %SubFile{name: name, content: content} ->
       local_file_name = Path.join(subdir_name, name)
-      File.write!(local_file_name, transform_content.(content))
+      File.write!(local_file_name, transform_content.(content |> convert_to_utf8()))
       Path.join(subdir, name)
     end)
+  end
+
+  defp convert_to_utf8(content) do
+    case :unicode.characters_to_binary(content) do
+      {:error, _, _} ->
+        case :unicode.characters_to_binary(content, :latin1) do
+          {:error, _, _} -> content
+          bin -> bin
+        end
+      _ -> content
+    end
   end
 
   defp get_all_groups(students) do
