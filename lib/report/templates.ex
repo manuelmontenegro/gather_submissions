@@ -20,6 +20,7 @@ defmodule GatherSubmissions.Report.Templates do
           - surname: student's last name
           - user: user's id in DOMjudge
           - group: group's id to which the student belongs
+          - metadata: student's metadata
 
       * attempts: A list of the submissions sent by any of group members. Each attempt contains five fields:
           - submission_id: submission's id, as given by DOMjudge

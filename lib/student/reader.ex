@@ -65,7 +65,8 @@ defmodule GatherSubmissions.Student.Reader do
       name: map[header["name"]],
       surname: map[header["surname"]],
       user: map[header["user_id"]],
-      group: if(Map.has_key?(header, "group"), do: map[header["group"]], else: nil)
+      group: if(Map.has_key?(header, "group"), do: map[header["group"]], else: nil),
+      metadata: if(Map.has_key?(header, "metadata"), do: map[header["metadata"]], else: nil)
     }
   end
 end

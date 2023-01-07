@@ -10,13 +10,16 @@ defmodule GatherSubmissions.Student do
   * `user`: DOMjudge user name corresponding to the student.
 
   * `group`: group identifier to which the student belongs.
+
+  * `metadata`: metadata associated with the student
   """
 
   @type t() :: %__MODULE__{
           name: String.t(),
           surname: String.t(),
           user: String.t(),
-          group: String.t()
+          group: String.t(),
+          metadata: String.t()
         }
-  defstruct [:name, :surname, :user, :group]
+  defstruct [:name, :surname, :user, :group, :metadata]
 end

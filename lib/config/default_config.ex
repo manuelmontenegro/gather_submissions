@@ -43,6 +43,7 @@ defmodule GatherSubmissions.Config.DefaultConfig do
   #     surname (String)
   #     user_id (String)
   #     group (String, optional)
+  #     metadata (String, optional)
   #
   # As explained in the previous option, the first line of the CSV file should
   # contain a header with the name of each field. The following section specifies
@@ -66,19 +67,25 @@ defmodule GatherSubmissions.Config.DefaultConfig do
   # If the 'group' option is ommited, each student will be assumed to work on their
   # own, so the output PDF file will contain the last submission of each student.
   #
-  # For example, in the CSV file shown above we should have:
+  # The 'metadata' option is also optional. If not ommited, it specifies the column
+  # that containts each student's metadata (for example, email address). This can be
+  # used in customized LaTeX templates.
+  #
+  # For example, in the CSV file shown above we could have:
   #
   # csv_header:
   #   name: "ST_Name"
   #   surname: "ST_Surname"
   #   user_id: "DOMUser"
   #   group: "Group"
+  #   metadata: "Email"
 
   csv_header:
     name: "Nombre"
     surname: "Apellidos"
     user_id: "Usuario"
     group: "Grupo"
+    metadata: "Correo"
 
 
   # The following options contain the access data to DOMjudge's server. All of these
