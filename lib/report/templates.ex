@@ -49,6 +49,7 @@ defmodule GatherSubmissions.Report.Templates do
   \usepackage{comment}
 
   \setmonofont{Inconsolata}
+  \pagestyle{empty}
 
   \definecolor{mygreen}{rgb}{0,0.6,0}
   \definecolor{mygray}{rgb}{0.5,0.5,0.5}
@@ -105,7 +106,7 @@ defmodule GatherSubmissions.Report.Templates do
     <%#------------------------------------- ATTEMPTS ------------------------------------- %>
     <%= if report.attempts != [] do %>
       \begin{center}\begin{tabular}{|c|c|l|c|}\hline
-      \textbf{ID envio} & \textbf{Usuario/a} & \textbf{Hora envío} & \textbf{Veredicto} \\\hline
+      \textbf{ID envío} & \textbf{Usuario/a} & \textbf{Hora envío} & \textbf{Veredicto} \\\hline
       <%= for attempt <- report.attempts do %>
         <%= if attempt.selected do %>\rowcolor{Selected}<% end %>
         <%= attempt.submission_id %> & <%= attempt.user_id %> & <%= attempt.time %> & 
